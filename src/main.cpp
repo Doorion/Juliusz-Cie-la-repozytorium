@@ -1,37 +1,40 @@
+#include <SFML/Graphics.hpp>
+#include "Player.h"
 #include <iostream>
-#include <memory>
-#include <vector>
-#include <chrono>
-#include <thread>
-#include "../include/Player.h"
 
 int main() {
-    std::shared_ptr<Player> player = std::make_shared<Player>(1, 1);
+    sf::RenderWindow window(sf::VideoMode(640, 480), "PuzzleGame");
 
+    Player player(5, 5); // startowa pozycja w kafelkach
 
-    std::cout << "Sterowanie: w (góra), s (dół), a (lewo), d (prawo), q (wyjście)\n";
+    sf::Clock clock;  // do mierzenia deltaTime
 
-    char input;
-    bool running = true;
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
 
-    while (running) {
-        std::cout << "Podaj kierunek: ";
-        std::cin >> input;
-
-        switch (input) {
-            case 'w': player->move(0, -1); break;
-            case 's': player->move(0, 1); break;
-            case 'a': player->move(-1, 0); break;
-            case 'd': player->move(1, 0); break;
-            case 'q': running = false; break;
-            default:
-                std::cout << "Nieznany ruch!\n";
+            if (event.type == sf::Event::KeyPressed) {
+                switch (event.key.code) {
+                    case sf::Keyboard::W: player.move(0, -1); break;
+                    case sf::Keyboard::S: player.move(0, 1);  break;
+                    case sf::Keyboard::A: player.move(-1, 0); break;
+                    case sf::Keyboard::D: player.move(1, 0);  break;
+                    case sf::Keyboard::Q: window.close();      break;
+                    default: break;
+                }
+            }
         }
 
-        player->update(0); // deltaTime = 0 (bo tu nie robimy animacji)
-        std::cout << "Pozycja: (" << player->getX() << ", " << player->getY() << ")\n";
+        float deltaTime = clock.restart().asSeconds();
+
+        player.update(deltaTime);
+
+        window.clear(sf::Color::Black);
+        player.draw(window);
+        window.display();
     }
 
-    std::cout << "Koniec gry.\n";
     return 0;
 }
