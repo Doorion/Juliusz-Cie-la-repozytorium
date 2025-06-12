@@ -1,17 +1,16 @@
 #pragma once
-#include "Object.h"
+#include "GameObject.h"
 
-class Player : public Object {
+class Player : public GameObject {
 public:
-    Player();
-    std::string getType() const override;
-    void update(float deltaTime) override;
+    Player(int x, int y);
 
-    void move(float dx, float dy);
-    float getX() const;
-    float getY() const;
+    bool isSolid() const override;
+    void move(int dx, int dy);
+    int getX() const;
+    int getY() const;
 
 private:
-    float x, y; // pozycja gracza
-    float speed; // prędkość w pikselach/sekundę
+    int x, y;
 };
+
