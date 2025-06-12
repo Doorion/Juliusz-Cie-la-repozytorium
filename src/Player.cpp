@@ -1,22 +1,18 @@
 #include "Player.h"
-#include <iostream>
 
-Player::Player() : x(0), y(0), speed(100.0f) {}
-
-std::string Player::getType() const {
-    return "Player";
+Player::Player(int x_, int y_) : x(x_), y(y_) {
+    frames = { "P", "p" }; // animacja chodzenia: klatki
+    frameTime = 0.3f;      // co ile sekund zmieniać
 }
 
-void Player::update(float deltaTime) {
-    // Przykład "animacji": automatyczne przesuwanie się gracza w prawo
-    x += speed * deltaTime;
-    std::cout << "Pozycja gracza: (" << x << ", " << y << ")\n";
+bool Player::isSolid() const {
+    return false; // Gracz nie blokuje innych obiektów
 }
 
-void Player::move(float dx, float dy) {
+void Player::move(int dx, int dy) {
     x += dx;
     y += dy;
 }
 
-float Player::getX() const { return x; }
-float Player::getY() const { return y; }
+int Player::getX() const { return x; }
+int Player::getY() const { return y; }
