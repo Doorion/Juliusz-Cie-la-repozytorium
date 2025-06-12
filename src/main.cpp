@@ -6,7 +6,8 @@
 #include "../include/Player.h"
 
 int main() {
-    std::shared_ptr<Player> player = std::make_shared<Player>();
+    std::shared_ptr<Player> player = std::make_shared<Player>(1, 1);
+
 
     std::cout << "Sterowanie: w (góra), s (dół), a (lewo), d (prawo), q (wyjście)\n";
 
