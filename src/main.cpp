@@ -1,38 +1,46 @@
 #include <SFML/Graphics.hpp>
-#include "Player.h"
-#include <iostream>
+#include "Level.h"
+#include <vector>
+#include <string>
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(640, 480), "PuzzleGame");
 
-    Player player(5, 5); // startowa pozycja w kafelkach
+    std::vector<std::string> levelData = {
+        "##########",
+        "#P..R..K.#",
+        "#..##.##.#",
+        "#..a....D#",
+        "#..##.##.#",
+        "#...T.T.T#",
+        "##########"
+    };
 
-    sf::Clock clock;  // do mierzenia deltaTime
+    Level level(levelData);
+    sf::Clock clock;
 
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
-
             if (event.type == sf::Event::KeyPressed) {
                 switch (event.key.code) {
-                    case sf::Keyboard::W: player.move(0, -1); break;
-                    case sf::Keyboard::S: player.move(0, 1);  break;
-                    case sf::Keyboard::A: player.move(-1, 0); break;
-                    case sf::Keyboard::D: player.move(1, 0);  break;
-                    case sf::Keyboard::Q: window.close();      break;
+                    case sf::Keyboard::W: level.movePlayer(0, -1); break;
+                    case sf::Keyboard::S: level.movePlayer(0, 1); break;
+                    case sf::Keyboard::A: level.movePlayer(-1, 0); break;
+                    case sf::Keyboard::D: level.movePlayer(1, 0); break;
+                    case sf::Keyboard::Q: window.close(); break;
                     default: break;
                 }
             }
         }
 
-        float deltaTime = clock.restart().asSeconds();
+        float dt = clock.restart().asSeconds();
+        level.update(dt);
 
-        player.update(deltaTime);
-
-        window.clear(sf::Color::Black);
-        player.draw(window);
+        window.clear();
+        level.draw(window);
         window.display();
     }
 
