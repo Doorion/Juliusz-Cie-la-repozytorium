@@ -13,6 +13,10 @@ public:
     void draw(sf::RenderWindow& window);
     std::shared_ptr<Player> getPlayer() const;
 
+    void movePlayer(int dx, int dy);
+    void update(float dt);
+
+
 private:
     std::vector<std::shared_ptr<GameObject>> objects;
     std::shared_ptr<Player> player;
