@@ -9,6 +9,7 @@
 class Level {
 public:
     Level();
+    Level(const std::vector<std::string>& mapData);
     void load(const std::vector<std::string>& mapData);
     void draw(sf::RenderWindow& window);
     std::shared_ptr<Player> getPlayer() const;
