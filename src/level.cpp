@@ -7,7 +7,19 @@
 #include "Door.h"
 #include "Trap.h"
 
-Level::Level(const std::vector<std::string>& layout) {
+Level::Level() {
+    objects.clear();
+    player = nullptr;
+}
+
+Level::Level(const std::vector<std::string>& mapData) {
+    load(mapData);
+}
+
+void Level::load(const std::vector<std::string>& layout) {
+    objects.clear();          // czyścimy istniejące obiekty
+    player = nullptr;         // resetujemy gracza
+
     for (int y = 0; y < layout.size(); ++y) {
         for (int x = 0; x < layout[y].size(); ++x) {
             char tile = layout[y][x];
@@ -22,7 +34,7 @@ Level::Level(const std::vector<std::string>& layout) {
                     objects.push_back(std::make_shared<Treasure>(x, y));
                     break;
                 case 'P':
-                    player = std::make_shared<Player>(x, y);
+                    player = std::make_shared<Player>(x, y);  // zapamiętaj gracza
                     objects.push_back(player);
                     break;
                 case 'K':
@@ -53,6 +65,12 @@ void Level::draw(sf::RenderWindow& window) {
 const std::vector<std::shared_ptr<GameObject>>& Level::getObjects() const {
     return objects;
 }
+void Level::movePlayer(int dx, int dy) {
+    if (player) {
+        player->move(dx, dy);
+    }
+}
+
 void Level::movePlayer(int dx, int dy) {
     if (player) {
         player->move(dx, dy);
