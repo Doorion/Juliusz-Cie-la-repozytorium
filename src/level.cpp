@@ -22,7 +22,8 @@ Level::Level(const std::vector<std::string>& layout) {
                     objects.push_back(std::make_shared<Treasure>(x, y));
                     break;
                 case 'P':
-                    objects.push_back(std::make_shared<Player>(x, y));
+                    player = std::make_shared<Player>(x, y);
+                    objects.push_back(player);
                     break;
                 case 'K':
                     objects.push_back(std::make_shared<Key>(x, y));
@@ -51,4 +52,19 @@ void Level::draw(sf::RenderWindow& window) {
 
 const std::vector<std::shared_ptr<GameObject>>& Level::getObjects() const {
     return objects;
+}
+void Level::movePlayer(int dx, int dy) {
+    if (player) {
+        player->move(dx, dy);
+    }
+}
+
+void Level::update(float dt) {
+    for (auto& obj : objects) {
+        obj->update(dt);
+    }
+
+    if (player) {
+        player->update(dt);
+    }
 }
