@@ -1,25 +1,17 @@
-#include "Key.h"
-#include <iostream>
+#pragma once
+#include "GameObject.h"
+#include <SFML/Graphics.hpp>
 
-Key::Key(int x_, int y_) : x(x_), y(y_) {
-    if (!texture.loadFromFile("assets/klucz.png")) {
-        std::cerr << "Nie można załadować grafiki klucza!\n";
-    }
-    sprite.setTexture(texture);
-    sprite.setPosition(x * 32, y * 32);
-}
-
-bool Key::isSolid() const {
-    return false;
-}
-
-void Key::update(float /*dt*/) {
-}
-
-void Key::draw(sf::RenderWindow& window) {
-    window.draw(sprite);
-}
-
-std::string Key::getSymbol() const {
-    return "K";
-}
+class Key : public GameObject {
+public:
+    Key(int x, int y);
+    bool isSolid() const override;
+    void update(float dt) override;
+    void draw(sf::RenderWindow& window) override;
+    std::string getSymbol() const override;
+    
+private:
+    int x, y;
+    sf::Texture texture;
+    sf::Sprite sprite;
+};
