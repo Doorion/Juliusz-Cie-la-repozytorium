@@ -17,40 +17,34 @@ Level::Level(const std::vector<std::string>& mapData) {
 }
 
 void Level::load(const std::vector<std::string>& layout) {
-    objects.clear();          // czyścimy istniejące obiekty
-    player = nullptr;         // resetujemy gracza
+    objects.clear();
+    player = nullptr;
 
-    for (int y = 0; y < layout.size(); ++y) {
-        for (int x = 0; x < layout[y].size(); ++x) {
+    for (size_t y = 0; y < layout.size(); ++y) {
+        for (size_t x = 0; x < layout[y].size(); ++x) {
             char tile = layout[y][x];
             switch (tile) {
-                case '#':
-                    objects.push_back(std::make_shared<Wall>(x, y));
-                    break;
-                case 'R':
-                    objects.push_back(std::make_shared<Rock>(x, y));
-                    break;
-                case 'T':
-                    objects.push_back(std::make_shared<Treasure>(x, y));
-                    break;
-                case 'P':
-                    player = std::make_shared<Player>(x, y);  // zapamiętaj gracza
-                    objects.push_back(player);
-                    break;
-                case 'K':
-                    objects.push_back(std::make_shared<Key>(x, y));
-                    break;
-                case 'D':
-                    objects.push_back(std::make_shared<Door>(x, y));
-                    break;
-                case 'a':
-                    objects.push_back(std::make_shared<Trap>(x, y, true));  // aktywna
-                    break;
-                case 'x':
-                    objects.push_back(std::make_shared<Trap>(x, y, false)); // nieaktywna
-                    break;
-                default:
-                    break;
+            case 'T':
+                objects.push_back(std::make_shared<Treasure>(x, y));
+                break;
+            case 'P':
+                player = std::make_shared<Player>(x, y);  // zapamiętaj gracza
+                objects.push_back(player);
+                break;
+            case 'K':
+                objects.push_back(std::make_shared<Key>(x, y));
+                break;
+            case 'D':
+                objects.push_back(std::make_shared<Door>(x, y));
+                break;
+            case 'a':
+                objects.push_back(std::make_shared<Trap>(x, y, true));  // aktywna
+                break;
+            case 'x':
+                objects.push_back(std::make_shared<Trap>(x, y, false)); // nieaktywna
+                break;
+            default:
+                break;
             }
         }
     }
@@ -71,12 +65,6 @@ void Level::movePlayer(int dx, int dy) {
     }
 }
 
-void Level::movePlayer(int dx, int dy) {
-    if (player) {
-        player->move(dx, dy);
-    }
-}
-
 void Level::update(float dt) {
     for (auto& obj : objects) {
         obj->update(dt);
@@ -85,4 +73,6 @@ void Level::update(float dt) {
     if (player) {
         player->update(dt);
     }
+    std::vector<std::shared_ptr<GameObject>> gameObjects;
+    gameObjects.push_back(std::make_shared<Treasure>(10, 20));  // Teraz zadziała
 }

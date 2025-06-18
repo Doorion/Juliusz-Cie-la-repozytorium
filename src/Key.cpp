@@ -6,7 +6,7 @@ Key::Key(int x_, int y_) : x(x_), y(y_) {
         std::cerr << "Nie można załadować grafiki klucza!\n";
     }
     sprite.setTexture(texture);
-    sprite.setPosition(x * 32, y * 32);
+    sprite.setPosition(x * 32, y * 32); // zakładamy rozmiar kafelka 32x32
 }
 
 bool Key::isSolid() const {
@@ -14,6 +14,7 @@ bool Key::isSolid() const {
 }
 
 void Key::update(float /*dt*/) {
+    // na razie brak logiki
 }
 
 void Key::draw(sf::RenderWindow& window) {

@@ -1,56 +1,54 @@
 #include "Player.h"
-#include <iostream>
 
-Player::Player(int x_, int y_) : x(x_), y(y_) {
-    loadTextures();
-    if (!textures.empty()) {
-        sprite.setTexture(textures[0]);
+Player::Player(int x, int y) : x_(x), y_(y), frameTime(0.1f), currentFrame(0) {
+    try {
+        loadTextures();
+    } catch (const std::exception& e) {
+        std::cerr << "Player initialization error: " << e.what() << std::endl;
+        throw;
     }
-    sprite.setPosition(x * 32, y * 32); // Zakładamy kafelek 32x32
+    sprite.setPosition(x_ * 32.f, y_ * 32.f);
 }
 
 void Player::loadTextures() {
-    std::vector<std::string> files = {
-        "assets/gracz_lewo1.png",
-        "assets/gracz_lewo2.png"
-    };
-
-    for (const auto& file : files) {
-        sf::Texture texture;
-        if (!texture.loadFromFile(file)) {
-            std::cerr << "Błąd ładowania pliku: " << file << "\n";
-        } else {
-            textures.push_back(texture);
-        }
+    if (!texture.loadFromFile("assets/player.png")) {
+        throw std::runtime_error("Failed to load player texture");
     }
-}
-
-bool Player::isSolid() const {
-    return false;
+    sprite.setTexture(texture);
 }
 
 std::string Player::getSymbol() const {
     return "P";
 }
 
-void Player::move(int dx, int dy) {
-    x += dx;
-    y += dy;
-    sprite.setPosition(x * 32, y * 32);
+bool Player::isSolid() const {
+    return true;
 }
 
-int Player::getX() const { return x; }
-int Player::getY() const { return y; }
-
 void Player::update(float dt) {
-    timeSinceLastFrame += dt;
-    if (timeSinceLastFrame >= frameTime && !textures.empty()) {
-        timeSinceLastFrame = 0.0f;
-        currentFrame = (currentFrame + 1) % textures.size();
-        sprite.setTexture(textures[currentFrame]);
+    (void)dt; // Wyciszenie warningu o nieużywanym parametrze
+    // Logika aktualizacji (np. animacja)
+    frameTime -= dt;
+    if (frameTime <= 0) {
+        currentFrame = (currentFrame + 1) % 4;
+        frameTime = 0.1f;
     }
 }
 
 void Player::draw(sf::RenderWindow& window) {
     window.draw(sprite);
+}
+
+void Player::move(int dx, int dy) {
+    x_ += dx;
+    y_ += dy;
+    sprite.setPosition(x_ * 32.f, y_ * 32.f);
+}
+
+int Player::getX() const {
+    return x_;
+}
+
+int Player::getY() const {
+    return y_;
 }
